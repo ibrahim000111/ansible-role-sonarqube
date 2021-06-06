@@ -49,7 +49,7 @@
 
             "sudo ansible-galaxy collection install -r /home/ubuntu/sonar/ansible_config/requirements.yaml",
 
-            "sudo ansible-playbook /home/ubuntu/sonar/ansible_config/site.yml --extra-vars '{\"SONAR_DB_APP_USER\": \"USER@sonar-db\", \"SONAR_DB_PASS\": \"PASS\", \"SONAR_DB_URL\": \"jdbc:postgresql://sonar-db.com:5432/sonar?sslmode=require&gssEncMode=disable\", \"VAULT_ADDR\": \"https://my-vault.com:8200\", \"VAULT_JENKINS_PASS\": \"PASS\", \"VAULT_JENKINS_USER\": \"USER\"}'"
+            "sudo ansible-playbook /home/ubuntu/sonar/ansible_config/site.yml --extra-vars '{\"SONAR_DB_APP_USER\": \"USER@sonar-db\", \"SONAR_DB_PASS\": \"PASS\", \"SONAR_DB_URL\": \"jdbc:postgresql://sonar-db.com:5432/sonar?sslmode=require&gssEncMode=disable\", \"VAULT_ADDR\": \"https://my-vault.com:8200\", \"VAULT_JENKINS_PASS\": \"VAULT_PASS\", \"VAULT_JENKINS_USER\": \"VAULT_USER\"}'"
         ]
     }]
 }

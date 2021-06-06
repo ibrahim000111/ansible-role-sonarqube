@@ -33,7 +33,7 @@ Vagrant.configure(2) do |config|
                             "SONAR_DB_PASS": "PASS", \
                             "SONAR_DB_URL": "jdbc:postgresql://sonar-db.com:5432/sonar?sslmode=require&gssEncMode=disable", \
                             "VAULT_ADDR": "https://my-vault.com:8200", \
-                            "VAULT_JENKINS_PASS": "PASS", \
-                            "VAULT_JENKINS_USER": "USER"}'
+                            "VAULT_JENKINS_PASS": "VAULT_PASS", \
+                            "VAULT_JENKINS_USER": "VAULT_USER"}'
     SHELL
 end
