@@ -1,0 +1,5 @@
+---
+
+- name: Install Vault with SNAP
+  snap: 
+    name: vault

@@ -1,0 +1,22 @@
+---
+
+- name: Vault login
+  script: "{{ role_path+'/files/vault_login.sh' }}"
+  environment:
+    VAULT_JENKINS_USER: "{{ VAULT_JENKINS_USER }}"
+    VAULT_JENKINS_PASS: "{{ VAULT_JENKINS_PASS }}"
+    VAULT_ADDR: "{{ VAULT_ADDR }}"
+  register: login_output
+
+- name: Generate file
+  script: "{{ role_path+'/files/generate_tls_certificate.sh' }}"
+  environment:
+    VAULT_ADDR: "{{ VAULT_ADDR }}"
+    DESTINY_FOLDER: "{{ role_path+'/files' }}"
+  register: cert_output
+
+- name: Move file to folder where HAProxy is gonna read it
+  template:
+    src: "{{ role_path+'/files/fullchain.pem' }}"
+    dest: "{{ playbook_dir }}/fullchain.pem"
+    mode: 0644

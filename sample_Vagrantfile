@@ -1,0 +1,39 @@
+# -*- mode: ruby -*-
+# vi set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+    config.vm.provider "virtualbox"
+    config.vm.provider "virtualbox" do |v|
+        v.memory = 4096
+        v.cpus = 4
+    end
+
+    config.vm.box = "bento/ubuntu-18.04"
+    config.vm.network "forwarded_port", guest: 9000, host: 5555
+    config.vm.network "forwarded_port", guest: 80, host: 6666 
+    config.vm.synced_folder ".", "/home/vagrant/shared"
+    config.vm.provision "shell", inline: <<-SHELL
+
+        sudo apt-get update -y
+        sudo apt-get install -y wget curl vim git unzip
+
+        # Ansible from its own PPA (no pip solution)
+        sudo apt install software-properties-common
+        sudo apt-add-repository --yes --update ppa:ansible/ansible
+        sudo apt install -y ansible
+
+        # Clone repo and start the app
+        sudo git clone https://github.com/guisesterheim/sonar_ansible.git /home/ubuntu/sonar
+
+        sudo ansible-galaxy collection install -r /home/ubuntu/sonar/ansible_config/requirements.yaml
+
+        sudo ansible-playbook /home/ubuntu/sonar/ansible_config/site.yml \
+            --extra-vars '{"SONAR_DB_APP_USER": "USER@sonar-db", \
+                            "SONAR_DB_PASS": "PASS", \
+                            "SONAR_DB_URL": "jdbc:postgresql://sonar-db.com:5432/sonar?sslmode=require&gssEncMode=disable", \
+                            "VAULT_ADDR": "https://my-vault.com:8200", \
+                            "VAULT_JENKINS_PASS": "PASS", \
+                            "VAULT_JENKINS_USER": "USER"}'
+    SHELL
+end

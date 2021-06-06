@@ -1,0 +1,13 @@
+---
+
+- name: Include install JQ Step
+  include: install_jq.yaml
+
+- name: Include install Vault step
+  include: install_vault.yaml
+
+- name: Generate TLS certificate
+  include: generate_certificate.yaml
+
+- name: Include HAProxy and copy template
+  include: install_and_copy_template.yaml

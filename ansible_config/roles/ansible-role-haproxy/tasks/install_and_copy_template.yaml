@@ -1,0 +1,20 @@
+---
+
+- name: Install HAProxy
+  apt:
+    name: "haproxy"
+    state: "present"
+
+- name: Configure location to find TLS certificate file
+  replace:
+    path: "{{ role_path + '/templates/haproxy.cfg' }}"
+    regexp: 'FULL_KEY_PEM_FILE_LOCATION'
+    replace: "{{ playbook_dir + '/fullchain.pem' }}"
+
+- name: Configure HAProxy
+  template:
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+    mode: 0644
+    backup: yes
+  notify: Restart HAProxy

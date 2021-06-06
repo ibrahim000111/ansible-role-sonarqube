@@ -1,0 +1,55 @@
+
+{
+    "__comments__": "under inline, we download dependencies, Ansible and run it from the machine. Access key and secret key must be passed as parameters on the run command like the example: 'packer build -var 'client_id=client_id' packer_config.json'",
+    "variables": {
+        "client_id": "",
+        "client_secret": "",
+        "tenant_id": "",
+        "subscription_id": ""
+    },
+    "builders": [{
+        "type": "azure-arm",
+
+        "client_id": "{{user `client_id`}}",
+        "client_secret": "{{user `client_secret`}}",
+        "tenant_id": "{{user `tenant_id`}}",
+        "subscription_id": "{{user `subscription_id`}}",
+
+        "managed_image_resource_group_name": "MyRG",
+        "managed_image_name": "packer-sonar-{{user `environment`}}-{{timestamp}}",
+        "build_resource_group_name": "MyRG-Packer-Builds",
+
+        "os_type": "Linux",
+        "image_publisher": "Canonical",
+        "image_offer": "UbuntuServer",
+        "image_sku": "18.04-LTS",
+
+        "azure_tags": {
+            "Name": "Sonar-Packer-Image",
+            "Application": "Sonar",
+            "Environment": "{{user `environment`}}"
+        },
+        "vm_size": "Standard_D2_v2"
+    }],
+    "provisioners": [{
+        "type": "shell",
+        "inline": [
+            "sudo apt-get update -y",
+            "sudo apt-get install -y wget curl vim git unzip",
+
+            "sudo apt-get install -y python3",
+            "sudo apt-get install -y python3-pip",
+            "sudo pip3 install --upgrade pip",
+            "sudo pip3 install packaging",
+
+            "sudo apt-get -y install python-jinja2 python-paramiko",
+            "sudo pip3 install ansible",
+
+            "sudo git clone https://github.com/guisesterheim/sonar_ansible.git /home/ubuntu/sonar",
+
+            "sudo ansible-galaxy collection install -r /home/ubuntu/sonar/ansible_config/requirements.yaml",
+
+            "sudo ansible-playbook /home/ubuntu/sonar/ansible_config/site.yml --extra-vars '{\"SONAR_DB_APP_USER\": \"USER@sonar-db\", \"SONAR_DB_PASS\": \"PASS\", \"SONAR_DB_URL\": \"jdbc:postgresql://sonar-db.com:5432/sonar?sslmode=require&gssEncMode=disable\", \"VAULT_ADDR\": \"https://my-vault.com:8200\", \"VAULT_JENKINS_PASS\": \"PASS\", \"VAULT_JENKINS_USER\": \"USER\"}'"
+        ]
+    }]
+}
