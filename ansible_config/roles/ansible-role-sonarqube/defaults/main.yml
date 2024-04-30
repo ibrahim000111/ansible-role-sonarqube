@@ -47,6 +47,9 @@ sonar_db_embedded_port: 9092
 sonar_db_user: "{{ SONAR_DB_APP_USER }}"
 sonar_db_pass: "{{ SONAR_DB_PASS }}"
 
+SONAR_DB_APP_USER: abc
+SONAR_DB_PASS: abc
+
 # SonarQube JDBC URL
 # examples (from default sonar.properties file):
 #----- MySQL 5.6 or greater
@@ -78,6 +81,9 @@ sonar_db_pass: "{{ SONAR_DB_PASS }}"
 #sonar_jdbc_url=jdbc:sqlserver://localhost;databaseName=sonar
 
 sonar_jdbc_url: "{{ SONAR_DB_URL }}"
+
+SONAR_DB_URL: jdbc:postgresql://localhost/sonar
+
 
 # SonarQube JDBC maximum number of active connection
 sonar_jdbc_maxactive: 60
