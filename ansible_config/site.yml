@@ -23,8 +23,8 @@
   roles:
     - ansible-role-sonarqube
 
-      #- name: Applies HAProxy config for SSL
-      #  hosts: localhost
-      #  become: true
-      #  roles:
-      #  - role: ansible-role-haproxy
+- name: Applies HAProxy config for SSL
+  hosts: localhost
+  become: true
+  roles:
+    - role: ansible-role-haproxy
